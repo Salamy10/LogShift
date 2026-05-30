@@ -6,7 +6,7 @@ import java.io.File;
 public class TryingFiles {
 	public static void main(String[] args) {
 		
-		File ordner = new File("C:\\Git\\LogShift\\LilDataBase");
+		File ordner = new File("LilDataBase");
 		File[] dateien = ordner.listFiles();
 		
 
@@ -16,7 +16,7 @@ public class TryingFiles {
 			
 			if(datei.isDirectory()) {
 				
-				File unterordner = new File("C:\\Git\\LogShift\\LilDataBase\\" + datei.getName());
+				File unterordner = new File("LilDataBase\\" + datei.getName());
 				File[] unterdateien = unterordner.listFiles();
 				
 				for (File unterdatei : unterdateien) {
