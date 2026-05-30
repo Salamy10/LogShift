@@ -1,5 +1,6 @@
 package practice;
 
+import java.awt.Desktop;
 import java.io.File;
 
 public class TryingFiles {
@@ -25,7 +26,16 @@ public class TryingFiles {
 		}
 		
 		
+		
+		System.out.println();
+		if(Desktop.isDesktopSupported()) {
+			System.out.println(true);
+		}else {System.out.println(false);}
+		
+		
 	}
+	
+	
 		
 
 }
