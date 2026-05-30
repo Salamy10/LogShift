@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
@@ -77,6 +79,8 @@ public class SimpleFileDatabase {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setBackground(Color.GRAY);
+		frame.getContentPane().setBackground(Color.GRAY);
 		frame.setBounds(400, 200, 1920/2, 1080/2);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -87,9 +91,29 @@ public class SimpleFileDatabase {
 		
 		DefaultTableModel model = new DefaultTableModel(daten, spalten);
 		table = new JTable(model);
+		table.setForeground(new Color(255, 255, 255));
 		table.setBounds(49, 41, 832, 106);
-		table.setBackground(new Color(192, 192, 192));
+		table.setBackground(Color.DARK_GRAY);
 		frame.getContentPane().add(table);
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		    public void valueChanged(ListSelectionEvent e) {
+		    	if (e.getValueIsAdjusting()) return;
+		        int zeile = table.getSelectedRow();
+		        if (zeile == -1) return;
+		        
+		        String dateiName = (String) table.getModel().getValueAt(zeile, 0);
+		        File zuOeffnen = new File(pfad + "\\" + dateiName);
+		        
+		        try {
+		            if (Desktop.isDesktopSupported()) {
+		                Desktop.getDesktop().open(zuOeffnen);
+		            }
+		        } catch (IOException ex) {
+		            ex.printStackTrace();
+		        }
+		    }
+		});
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(10, 52, 924, 438);
@@ -139,7 +163,7 @@ public class SimpleFileDatabase {
 				}
 			}
 		});
-		btnAdd.setBounds(10, 11, 89, 23);
+		btnAdd.setBounds(10, 11, 117, 23);
 		frame.getContentPane().add(btnAdd);
 		
 		btnDelete = new JButton("Löschen");
@@ -158,7 +182,7 @@ public class SimpleFileDatabase {
 				}
 			}
 		});
-		btnDelete.setBounds(109, 11, 89, 23);
+		btnDelete.setBounds(137, 11, 117, 23);
 		frame.getContentPane().add(btnDelete);
 		
 		btnDirectorieChooser = new JButton("Ordner suchen");
@@ -180,7 +204,7 @@ public class SimpleFileDatabase {
 				}
 			}
 		});
-		btnDirectorieChooser.setBounds(831, 11, 103, 23);
+		btnDirectorieChooser.setBounds(762, 11, 172, 23);
 		frame.getContentPane().add(btnDirectorieChooser);
 	}
 }
