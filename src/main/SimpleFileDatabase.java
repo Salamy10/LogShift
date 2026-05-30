@@ -176,7 +176,6 @@ public class SimpleFileDatabase {
 					    model.addRow(zeile);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Kein Ordner ausgewählt");
 					return;
 				}
 			}
