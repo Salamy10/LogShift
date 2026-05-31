@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="com.miglayout.swing_11.4.2.jar"/>
 	<classpathentry kind="lib" path="com.miglayout.core_11.4.2.jar"/>
 	<classpathentry kind="lib" path="/home/samuel/programming/git/Github - LogShift/sqlite-jdbc-3.53.1.0-natives-all/sqlite-jdbc-3.53.1.0-natives-all.jar"/>
+	<classpathentry kind="lib" path="/home/samuel/programming/git/Github - LogShift/sqlite-jdbc-3.53.1.0-natives-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
