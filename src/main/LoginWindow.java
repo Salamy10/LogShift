@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -56,11 +57,26 @@ public class LoginWindow {
 		txtPassword = new JPasswordField();
 		txtPassword.setBounds(210,150, 540, 50);
 		frame.getContentPane().add(txtPassword);
-		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.setBackground(Color.LIGHT_GRAY);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String userName = txtUserName.getText();
+				String password = new String(txtPassword.getPassword());
+				DataBaseManager d = new DataBaseManager();
+				User u = d.getUser(userName);
+				if (u == null) {
+				    JOptionPane.showMessageDialog(null, "User nicht gefunden!");
+				    return;
+				}
+				String hashedInput = d.hashPassword(password);
+				if (hashedInput.equals(u.getPasswordHash())) {
+					SimpleFileDatabase mainWindow = new SimpleFileDatabase(u.getDirectory());
+					mainWindow.show();
+					frame.dispose();
+				} else {
+				    JOptionPane.showMessageDialog(null, "Falsches Passwort!");
+				}
 			}
 		});
 		btnLogin.setBounds(322, 302, 328, 79);

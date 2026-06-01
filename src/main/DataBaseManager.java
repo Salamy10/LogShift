@@ -13,6 +13,14 @@ public class DataBaseManager {
     
     public DataBaseManager() {
         connect();
+        try {
+            Class.forName("org.sqlite.JDBC");  // ← Treiber registrieren
+            connection = DriverManager.getConnection("jdbc:sqlite:users.db");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
         createTable();
     }
     

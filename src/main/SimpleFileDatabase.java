@@ -103,15 +103,27 @@ public class SimpleFileDatabase {
 		        if (zeile == -1) return;
 		        
 		        String dateiName = (String) table.getModel().getValueAt(zeile, 0);
-		        File zuOeffnen = new File(pfad + "\\" + dateiName);
-		        
-		        try {
-		            if (Desktop.isDesktopSupported()) {
-		                Desktop.getDesktop().open(zuOeffnen);
+		        File geklickt = new File(pfad, dateiName);
+
+		        if (geklickt.isDirectory()) {
+		            // Ordner → in der App navigieren
+		            pfad = geklickt.getPath();
+		            model.setRowCount(0);
+		            Object[][] neueDaten = ladeOrdner(pfad);
+		            for (Object[] z : neueDaten) {
+		                model.addRow(z);
 		            }
-		        } catch (IOException ex) {
-		            ex.printStackTrace();
+		        } else {
+		            // Datei → mit Standardprogramm öffnen
+		        	try {
+			            if (Desktop.isDesktopSupported()) {
+			                Desktop.getDesktop().open(geklickt);
+			            }
+			        } catch (IOException ex) {
+			            ex.printStackTrace();
+			        }
 		        }
+		        
 		    }
 		});
 		
@@ -137,7 +149,7 @@ public class SimpleFileDatabase {
 					    dataType = dataType.substring(1);  
 					}
 					String fulfilled = name + "." + dataType;
-					File toAdd = new File(pfad + "\\" + fulfilled);
+					File toAdd = new File(pfad + File.separator + fulfilled);
 					try {
 					    toAdd.createNewFile();
 					} catch (IOException ex) {
@@ -175,7 +187,7 @@ public class SimpleFileDatabase {
 					JOptionPane.showMessageDialog(null, "Kein Element ausgewählt.");
 				} else { 
 					String dateiName = (String) table.getModel().getValueAt(zeile, 0);
-					File zuLoeschen = new File(pfad + "\\" + dateiName);
+					File zuLoeschen = new File(pfad + File.separator + dateiName);
 					zuLoeschen.delete();
 					model.removeRow(zeile);
 					JOptionPane.showMessageDialog(null, "Element aus Zeile " + zeile + " gelöscht.");
@@ -206,5 +218,38 @@ public class SimpleFileDatabase {
 		});
 		btnDirectorieChooser.setBounds(762, 11, 172, 23);
 		frame.getContentPane().add(btnDirectorieChooser);
+		
+		JButton btnBack = new JButton("Zurück");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File elternOrdner = new File(pfad).getParentFile();
+		        
+		        if (elternOrdner == null) {return;}
+		        else {
+		        	pfad = elternOrdner.getPath();
+		        	model.setRowCount(0);  
+		        	Object[][] neueDaten = ladeOrdner(pfad);
+					for (Object[] zeile : neueDaten) {
+					    model.addRow(zeile);
+					}
+		        }	
+		        
+		        // 1. pfad aktualisieren
+		        // 2. Tabelle leeren
+		        // 3. neu laden
+			}
+		});
+		btnBack.setBounds(578, 12, 172, 23);
+		frame.getContentPane().add(btnBack);
+	}
+	public void show() {
+	    frame.setVisible(true);
+	}
+	public void hide() {
+		frame.setVisible(false);
+	}
+	public SimpleFileDatabase(String pfad) {
+	    this.pfad = pfad;
+	    initialize();
 	}
 }
