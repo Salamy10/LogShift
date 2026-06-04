@@ -1,17 +1,23 @@
 package main;
 
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 
 public class SimpleFileDatabase {
@@ -89,18 +95,24 @@ public class SimpleFileDatabase {
 		Object[][] daten = ladeOrdner(pfad);
 		frame.getContentPane().setLayout(null);
 		
-		DefaultTableModel model = new DefaultTableModel(daten, spalten);
+		DefaultTableModel model = new DefaultTableModel(daten, spalten) {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;  // keine Zelle ist editierbar
+		    }
+		};
 		table = new JTable(model);
 		table.setForeground(new Color(255, 255, 255));
 		table.setBounds(49, 41, 832, 106);
 		table.setBackground(Color.DARK_GRAY);
 		frame.getContentPane().add(table);
 		
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-		    public void valueChanged(ListSelectionEvent e) {
-		    	if (e.getValueIsAdjusting()) return;
+		table.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+		        if (e.getClickCount() != 2) return;
 		        int zeile = table.getSelectedRow();
 		        if (zeile == -1) return;
+		
 		        
 		        String dateiName = (String) table.getModel().getValueAt(zeile, 0);
 		        File geklickt = new File(pfad, dateiName);
@@ -162,7 +174,7 @@ public class SimpleFileDatabase {
 				}
 				else {
 					
-					File toAdd = new File(pfad + "\\" + name);
+					File toAdd = new File(pfad + File.separator + name);
 					try {
 					    toAdd.createNewFile();
 					} catch (IOException ex) {

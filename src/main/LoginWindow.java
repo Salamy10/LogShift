@@ -16,6 +16,7 @@ public class LoginWindow {
 	private JFrame frame;
 	private JTextField txtUserName;
 	private JPasswordField txtPassword;
+	private JButton btntoRegister;
 
 	/**
 	 * Launch the application.
@@ -81,7 +82,27 @@ public class LoginWindow {
 		});
 		btnLogin.setBounds(322, 302, 328, 79);
 		frame.getContentPane().add(btnLogin);
+		
+		btntoRegister = new JButton("Register");
+		btntoRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegisterWindow mainWindow = new RegisterWindow();
+				mainWindow.show();
+				frame.dispose();
+			}
+		});
+		btntoRegister.setBackground(Color.LIGHT_GRAY);
+		btntoRegister.setBounds(322, 393, 328, 43);
+		frame.getContentPane().add(btntoRegister);
 		frame.setBounds(400, 200, 1920/2, 1080/2);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+	
+	public void show() {
+	    frame.setVisible(true);
+	}
+	public void hide() {
+		frame.setVisible(false);
 	}
 }
